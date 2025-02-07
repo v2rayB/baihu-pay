@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <title>Document</title>
+    <link rel="stylesheet" href="=css/reset.css">
+    <style>
+        .box {
+            width: 100%;
+            height: 900px;
+            background: url(img/1.png) no-repeat;
+            background-size: 100% 900px;
+
+
+        }
+
+        .p1 {
+            background: linear-gradient(to right, rgb(7, 16, 33), rgb(17, 11, 31));
+			padding-left: 1.875rem;
+			padding-right: 1.875rem;
+			padding-top: 10px;
+			
+        }
+
+        .top {
+            padding: 1.875rem;
+        }
+
+        main {}
+
+        .top img {
+            width: 30px;
+        }
+
+        .m2 {
+            color: white;
+            text-align: center;
+        }
+
+        .m2 p {
+            font-size: 14px;
+			font-weight: bold;
+        }
+
+        h2 {
+            font-weight: bolder;
+            font-size: 1.5625rem;
+            color: aqua;
+            margin: 3.5rem 0 1.25rem 0;
+        }
+
+        .m1 {
+            display: flex;
+            padding: .625rem;
+            justify-content: space-between;
+            width: 100%;
+            height: 65px;
+
+            background: url(img/3.png) no-repeat;
+            background-size: 100% 80px;
+
+        }
+
+        .m3 p:nth-child(1) {
+            color: rgb(40, 228, 254);
+            font-weight: bolder;
+            font-style: italic;
+            font-size: 1.05rem;
+            margin-top: -.25rem;
+        }
+
+        .m3 p:nth-child(2) {
+            color: rgb(75, 59, 119);
+            font-size: .8125rem;
+            margin-top: -.3125rem;
+        }
+
+        .m4 {
+            display: flex;
+            align-items: center;
+            color: rgb(22, 196, 247);
+            font-size: 1.175rem;
+            margin-top: -1.33rem;
+        }
+
+        .m4 i {
+            font-size: 16px;
+        }
+
+        .m7 {
+            width: 20px;
+            height: 20px;
+
+            border-radius: 50%;
+            margin-left: 20px;
+            background: rgb(12, 6, 31);
+        }
+
+        .m7_1 {
+            width: 20px;
+            height: 20px;
+
+            border-radius: 50%;
+            margin-left: 20px;
+            background: rgb(54, 171, 224);
+        }
+
+
+        .b1 {
+            justify-content: center;
+            display: flex;
+            margin-top: 10px;
+            margin-bottom: 2rem;
+
+        }
+
+        button {
+            width: 200px;
+            height: 3.4375rem;
+
+            background: url(img/2.png) no-repeat;
+            background-size: 100% 3.4375rem;
+            color: white;
+            font-weight: bolder;
+            font-size: 18px;
+            border: 0;
+            font-style: italic;
+            /*margin-top: -2.875rem;*/
+        }
+		
+		.loading {
+			position: fixed;
+			left: 38%;
+			top: 44%;
+			animation: loading 2s infinite;
+		}
+		
+		@keyframes loading {
+			0% {
+				transform: rotate(0deg);
+			}
+			100% {
+				transform: rotate(360deg);
+			}
+		}
+    </style>
+</head>
+
+<body style="margin: 0px;">
+    <div id="app">
+        <div class="box">
+            <div class="top">
+            </div>
+            <main>
+                <div class="m2">
+                    <h2>开通会员</h2>
+                    <p>会员加速更稳定，使用更方便</p>
+                </div>
+
+                <div class="p1">
+                    <div v-for="(item,index) in packageList" @click="switchPackage(index)" class="m1">
+                        <div class="m3" style="margin-top: 10px;">
+                            <p>{{item.name}}</p>
+                            <p>{{item.remark}}</p>
+                        </div>
+                        <div class="m4">
+                            <p>{{item.curPrice}}</p>
+                            <div :class="item.selected==0?'m7':'m7_1'">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 5px;align-items: start;display: flex">
+                        <div style="font-size: 15px;color: white;font-weight: bold;line-height:32px">支付方式</div>
+                        <div style="margin-left: 10px;display: flex;">
+                            <div @click="selPayType(1)"
+                                :style="curPayType==1?'display: flex;height: 30px;width: 150px;align-items: center;border: 1px solid #1678FE;justify-content: center;border-radius: 5px;background-color: #ffffff;':'display: flex;height: 30px;width: 150px;align-items: center;border: 1px solid #1678FE;justify-content: center;border-radius: 5px;'">
+                                <div><img src="img/alipay.png" style="height: 22px;width: 22px;" /></div>
+                                <div style="margin-left: 8px;font-size: 16px;color: #1678FE;">支付宝(推荐)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form :action="GoodPayUrl" method="post" id="goodPay" style="display: none;">
+                        <input name="pid" id="goodPay-pid" />
+                        <input name="type" id="goodPay-type" />
+                        <input name="out_trade_no" id="goodPay-out_trade_no" />
+                        <input name="notify_url" id="goodPay-notify_url" />
+                        <input name="return_url" id="goodPay-return_url" />
+                        <input name="name" id="goodPay-name" />
+                        <input name="money" id="goodPay-money" />
+
+                        <input name="sign" id="goodPay-sign" />
+                        <input name="sign_type" id="goodPay-sign_type" />
+                    </form>
+
+                    <div class="b1">
+                        <button @click="pay()">立即开通</button>
+                    </div>
+					
+					<div v-if="isLoading" class="loading"><img src="img/loading.png"/></div>
+                </div>
+            </main>
+        </div>
+    </div>
+    <script src="js/index.js"></script>
+    <script src="js/jquery.js"></script>
+    <script src="js/axios.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/layui/layui.js"></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                token: localStorage.getItem("fox-token"),
+                curPid: 8,
+                curPayType: 1,
+                packageList: [
+                    {
+                        pid: 7,
+                        name: "7天",
+                        selected: 0,
+                        curPrice: "￥21",
+                        remark: "每日仅需3.00元",
+                    },
+                    {
+                        pid: 8,
+                        name: "一个月",
+                        selected: 1,
+                        curPrice: "￥42",
+                        remark: "每日仅需1.40元",
+                    },
+                    {
+                        pid: 9,
+                        name: "一季度",
+                        selected: 0,
+                        curPrice: "￥98",
+                        remark: "每日仅需1.08元",
+                    },
+                    {
+                        pid: 10,
+                        name: "六个月",
+                        selected: 0,
+                        curPrice: "￥228",
+                        remark: "每日仅需1.26元",
+                    },
+                    {
+                        pid: 11,
+                        name: "一年",
+                        selected: 0,
+                        curPrice: "￥368",
+                        remark: "每日仅需1.00元",
+                    }
+                ],
+                isLoading: false,
+                GoodPayUrl: "",
+            },
+            methods: {
+                goodPay: function () {
+                    if (this.isLoading) return;
+                    this.isLoading = true
+                    var that = this
+                    var data = new FormData();
+                    data.append('pkg_id', this.curPid);
+                    data.append('pay_type', this.curPayType);
+                    axios({
+                        method: 'post',
+                        url: serverIp + '/vpn/pay_good',
+                        headers: {
+                            'xk-token': this.token,
+                        },
+                        data: data
+                    }).then(function (response) {
+						that.isLoading = false
+						var data = response.data;
+						if (data.statusCode != 200) {
+							alert(data.note)
+							return
+						}
+						var goodPay = data.response
+						$("#goodPay-pid").val(goodPay.pid)
+						$("#goodPay-type").val(goodPay.type)
+						$("#goodPay-out_trade_no").val(goodPay.out_trade_no)
+						$("#goodPay-notify_url").val(goodPay.notify_url)
+						$("#goodPay-return_url").val(goodPay.return_url)
+						$("#goodPay-name").val(goodPay.name)
+						$("#goodPay-money").val(goodPay.money)
+						$("#goodPay-sign").val(goodPay.sign)
+						$("#goodPay-sign_type").val(goodPay.sign_type)
+						$("#goodPay").submit()
+					}).catch(function (error) {
+						that.isLoading = false; // 请求出错时也恢复状态
+						console.error(error);
+					});
+                },
+                pay: function () {
+                    if (this.curPayType == 2) {
+                        this.goodPay()
+                    } else {
+                        this.goodPay()
+                    }
+                },
+                selPayType: function (payType) {
+                    this.curPayType = payType
+                },
+                switchPackage: function (index) {
+                    for (var item of this.packageList) {
+                        item.selected = 0
+                    }
+                    this.packageList[index].selected = 1
+                    this.curPid = this.packageList[index].pid
+                },
+                init: function () {
+                    var that = this
+                    axios({
+                        method: 'get',
+                        url: serverIp + '/vpn/pkg/index',
+                        headers: {
+                            'xk-token': this.token,
+                        }
+                    }).then(function (response) {
+                        var data = response.data;
+                        if (data.statusCode != 200) {
+                            alert("抱歉！当前会话信息已过期,请重新从APP内打开支付")
+                            return
+                        }
+                        that.GoodPayUrl = data.response.good_pay_url
+                    })
+                },
+            },
+            created: function () {
+                serverIp = "https://pay.lppfe.cn"
+                this.init()
+            }
+        })
+    </script>
+</body>
+
+</html>
